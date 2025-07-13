@@ -35,9 +35,10 @@ export default tseslint.config([
         'warn',
         { allowConstantExport: true },
       ],
-      'react-compiler/react-compiler': 'error',
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
+      'react-compiler/react-compiler': 'error',
+      'curly': 'error',
     },
     settings: {
       react: {
