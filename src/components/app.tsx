@@ -1,35 +1,49 @@
-import { useState } from 'react';
-import reactLogo from '../assets/react.svg';
-import viteLogo from '/vite.svg';
+import { Component } from 'react';
+import { UniversityService } from '../services/university-api';
+import { Search } from './search/search';
+import { Result } from './result/result';
+import type { University } from '../types';
+
 import './app.scss';
 
-function App() {
-  const [count, setCount] = useState(0);
+export default class App extends Component {
+  state = {
+    universityService: new UniversityService(),
+    country: '',
+    data: [],
+    hasError: false,
+  };
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  async getUniversitiesList(): Promise<University[] | []> {
+    return await this.state.universityService.getUniversities(
+      this.state.country
+    );
+  }
+
+  componentDidCatch() {
+    this.setState({
+      hasError: true,
+    });
+  }
+
+  async componentDidMount() {
+    this.setState({
+      data: await this.getUniversitiesList(),
+    });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      console.log('error: ', this.state.hasError);
+    }
+
+    return (
+      <div className="container text-center d-grid gap-3">
+        <div className="row">
+          <Search />
+          <Result data={this.state.data} />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+    );
+  }
 }
-
-export default App;
