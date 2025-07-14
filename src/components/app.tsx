@@ -27,7 +27,6 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   async handleSearchChange(country: string) {
-    console.log('from search', this, country);
     const universities =
       await this.state.universityService.getUniversities(country);
 
@@ -39,17 +38,12 @@ export default class App extends Component<AppProps, AppState> {
     if (!universities) {
       console.log('not found');
     }
-    console.log('from search2', this, universities);
   }
 
   async getUniversitiesList(): Promise<University[] | []> {
-    console.log('get data', this.state.country);
-
     const universities = await this.state.universityService.getUniversities(
       this.state.country
     );
-
-    console.log('5555', universities);
 
     return universities;
   }
@@ -61,7 +55,6 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   async componentDidMount() {
-    console.log('did mount', this);
     this.setState({
       data: await this.getUniversitiesList(),
     });
