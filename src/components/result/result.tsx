@@ -1,3 +1,4 @@
+import { NotFound } from '../not-found/not-found';
 import type { University } from '../../types';
 
 type RowProps = {
@@ -21,6 +22,10 @@ const TableRow = (rowData: RowProps) => {
 };
 
 export const Result = ({ data }: { data: University[] }) => {
+  if (!data.length) {
+    return <NotFound />;
+  }
+
   return (
     <table className="table">
       <thead>

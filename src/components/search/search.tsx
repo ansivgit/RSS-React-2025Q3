@@ -19,7 +19,7 @@ export class Search extends Component<SearchProps, { country: string }> {
   render() {
     return (
       <div className="d-grid gap-2 d-md-flex mb-3">
-        <div className="col">
+        <div className="col-6 mx-auto d-grid gap-2">
           <input
             type="text"
             className="form-control"
@@ -28,7 +28,7 @@ export class Search extends Component<SearchProps, { country: string }> {
             onChange={this.handleChange}
           />
         </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
+        <div className="col-6 mx-auto d-grid gap-2">
           <Button
             text="Search"
             onClick={() => this.props.onInputChange(this.state.country)}
