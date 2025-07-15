@@ -1,12 +1,13 @@
 import { Component } from 'react';
+import { ErrorChecker } from './error-checker/error-checker';
+import { ErrorBoundary } from './error-boundary/error-boundary';
 import { Loader } from './loader/loader';
 import { Result } from './result/result';
 import { Search } from './search/search';
-import { UniversityService } from '../services/university-api';
+import { LStorageService, UniversityService } from '../services';
 import type { University } from '../types';
 
 import './app.scss';
-import { ErrorBoundary } from './error-boundary/error-boundary';
 
 type AppProps = unknown;
 type AppState = {
@@ -18,8 +19,11 @@ type AppState = {
 };
 
 export default class App extends Component<AppProps, AppState> {
+  lStorageService: LStorageService;
+
   constructor(props: AppProps) {
     super(props);
+
     this.state = {
       universityService: new UniversityService(),
       country: '',
@@ -27,17 +31,9 @@ export default class App extends Component<AppProps, AppState> {
       isLoading: true,
       hasError: false,
     };
+
     this.handleSearchChange = this.handleSearchChange.bind(this);
-  }
-
-  async handleSearchChange(country: string) {
-    const universities =
-      await this.state.universityService.getUniversities(country);
-
-    this.setState({ country });
-    this.setState({
-      data: universities,
-    });
+    this.lStorageService = new LStorageService();
   }
 
   async getUniversitiesList(): Promise<University[] | []> {
@@ -52,15 +48,42 @@ export default class App extends Component<AppProps, AppState> {
     return universities;
   }
 
-  componentDidCatch() {
+  async handleSearchChange(country: string) {
+    const universities =
+      await this.state.universityService.getUniversities(country);
+
+    this.setState({ country });
     this.setState({
-      hasError: true,
+      data: universities,
     });
+
+    this.lStorageService.setCountry(country);
+    this.lStorageService.setUniversities(universities);
   }
 
   async componentDidMount() {
+    const country = this.lStorageService.getCountry();
+    const universities = this.lStorageService.getUniversities();
+
+    if (country) {
+      this.setState({ country });
+    }
+
+    if (universities) {
+      this.setState({
+        data: universities,
+        isLoading: false,
+      });
+    } else {
+      this.setState({
+        data: await this.getUniversitiesList(),
+      });
+    }
+  }
+
+  componentDidCatch() {
     this.setState({
-      data: await this.getUniversitiesList(),
+      hasError: true,
     });
   }
 
@@ -78,6 +101,7 @@ export default class App extends Component<AppProps, AppState> {
             ) : (
               <Result data={this.state.data} />
             )}
+            <ErrorChecker />
           </div>
         </ErrorBoundary>
       </div>
