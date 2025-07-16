@@ -1,5 +1,6 @@
 import { type ReactNode, type ErrorInfo, Component } from 'react';
-import { ErrorIndicator } from '../error-indicator/error-indicator';
+import { Alert } from '../alert/alert';
+import { ALERT_TEXT } from '../../constants';
 
 type ErrorBoundaryProps = {
   children: ReactNode;
@@ -33,7 +34,7 @@ export class ErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return <ErrorIndicator />;
+      return <Alert text={ALERT_TEXT.ERROR} color="danger" />;
     }
 
     return this.props.children;

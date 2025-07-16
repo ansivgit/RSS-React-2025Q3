@@ -1,6 +1,7 @@
 import { Component } from 'react';
+import { Alert } from '../alert/alert';
 import { Button } from '../button/button';
-import { ErrorIndicator } from '../error-indicator/error-indicator';
+import { ALERT_TEXT } from '../../constants';
 
 type CheckerProps = unknown;
 export class ErrorChecker extends Component<
@@ -23,7 +24,7 @@ export class ErrorChecker extends Component<
 
   render() {
     if (this.state.hasError) {
-      return <ErrorIndicator />;
+      return <Alert text={ALERT_TEXT.ERROR} color="danger" />;
     }
 
     return (

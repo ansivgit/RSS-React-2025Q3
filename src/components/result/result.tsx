@@ -1,5 +1,6 @@
-import { NotFound } from '../not-found/not-found';
+import { Alert } from '../alert/alert';
 import type { University } from '../../types';
+import { ALERT_TEXT } from '../../constants';
 
 type RowProps = {
   id: number;
@@ -23,7 +24,7 @@ const TableRow = (rowData: RowProps) => {
 
 export const Result = ({ data }: { data: University[] }) => {
   if (!data.length) {
-    return <NotFound />;
+    return <Alert text={ALERT_TEXT.NOT_FOUND} />;
   }
 
   return (
