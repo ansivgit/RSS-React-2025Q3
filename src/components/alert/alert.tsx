@@ -1,6 +1,8 @@
+import type { AlertColor } from '../../types';
+
 type AlertProps = {
   text: string;
-  color?: 'info' | 'danger' | 'warning';
+  color?: AlertColor;
 };
 
 export const Alert = ({ text, color = 'info' }: AlertProps) => {

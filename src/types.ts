@@ -18,6 +18,16 @@ export type BtnColor =
   | 'outline-dark'
   | 'outline-link';
 
+export type AlertColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'light'
+  | 'dark';
+
 export type University = {
   'domains': string[];
   'country': string;
